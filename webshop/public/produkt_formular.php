@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
         $fehler[] = 'Preis muss eine Zahl sein.'; // Fehlermeldung sammeln
     }
 
-    $bildPfad = $produkt->bildPfad ?? null; // bestehendes Bild beibehalten, falls kein neues hochgeladen wird
+    $bildPfad = $produkt?->bildPfad ?? null; // bestehendes Bild beibehalten, falls kein neues hochgeladen wird
     if (!empty($_FILES['bild']['name'])) { // ein neues Bild wurde ausgewählt
         $upload = $_FILES['bild']; // Upload-Informationen holen
 

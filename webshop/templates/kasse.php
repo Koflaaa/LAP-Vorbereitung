@@ -46,19 +46,19 @@
                 <fieldset>
                     <legend>Rechnungsadresse</legend>
                     <label>Straße
-                        <input type="text" name="r_strasse" value="<?= htmlspecialchars($eingabe['r_strasse'] ?? $gespeicherteRechnung->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                        <input type="text" name="r_strasse" value="<?= htmlspecialchars($eingabe['r_strasse'] ?? $gespeicherteRechnung?->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Hausnummer
-                        <input type="text" name="r_hausnummer" value="<?= htmlspecialchars($eingabe['r_hausnummer'] ?? $gespeicherteRechnung->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                        <input type="text" name="r_hausnummer" value="<?= htmlspecialchars($eingabe['r_hausnummer'] ?? $gespeicherteRechnung?->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>PLZ
-                        <input type="text" name="r_plz" value="<?= htmlspecialchars($eingabe['r_plz'] ?? $gespeicherteRechnung->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                        <input type="text" name="r_plz" value="<?= htmlspecialchars($eingabe['r_plz'] ?? $gespeicherteRechnung?->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Ort
-                        <input type="text" name="r_ort" value="<?= htmlspecialchars($eingabe['r_ort'] ?? $gespeicherteRechnung->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                        <input type="text" name="r_ort" value="<?= htmlspecialchars($eingabe['r_ort'] ?? $gespeicherteRechnung?->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Land
-                        <input type="text" name="r_land" value="<?= htmlspecialchars($eingabe['r_land'] ?? $gespeicherteRechnung->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
+                        <input type="text" name="r_land" value="<?= htmlspecialchars($eingabe['r_land'] ?? $gespeicherteRechnung?->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
                     </label>
                 </fieldset>
 
@@ -70,19 +70,19 @@
                     </label>
                     <div id="lieferadresse-felder"> <!-- die eigentlichen Felder, werden bei "identisch" ausgeblendet -->
                         <label>Straße
-                            <input type="text" name="l_strasse" value="<?= htmlspecialchars($eingabe['l_strasse'] ?? $gespeicherteLieferung->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                            <input type="text" name="l_strasse" value="<?= htmlspecialchars($eingabe['l_strasse'] ?? $gespeicherteLieferung?->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Hausnummer
-                            <input type="text" name="l_hausnummer" value="<?= htmlspecialchars($eingabe['l_hausnummer'] ?? $gespeicherteLieferung->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                            <input type="text" name="l_hausnummer" value="<?= htmlspecialchars($eingabe['l_hausnummer'] ?? $gespeicherteLieferung?->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>PLZ
-                            <input type="text" name="l_plz" value="<?= htmlspecialchars($eingabe['l_plz'] ?? $gespeicherteLieferung->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                            <input type="text" name="l_plz" value="<?= htmlspecialchars($eingabe['l_plz'] ?? $gespeicherteLieferung?->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Ort
-                            <input type="text" name="l_ort" value="<?= htmlspecialchars($eingabe['l_ort'] ?? $gespeicherteLieferung->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
+                            <input type="text" name="l_ort" value="<?= htmlspecialchars($eingabe['l_ort'] ?? $gespeicherteLieferung?->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Land
-                            <input type="text" name="l_land" value="<?= htmlspecialchars($eingabe['l_land'] ?? $gespeicherteLieferung->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
+                            <input type="text" name="l_land" value="<?= htmlspecialchars($eingabe['l_land'] ?? $gespeicherteLieferung?->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
                         </label>
                     </div>
                 </fieldset>

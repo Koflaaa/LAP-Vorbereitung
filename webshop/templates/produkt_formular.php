@@ -20,23 +20,23 @@
         <?php endif; ?>
 
         <form action="produkt_formular.php" method="post" enctype="multipart/form-data"> <!-- multipart nötig für den Bild-Upload -->
-            <input type="hidden" name="produkt_id" value="<?= (int) ($produkt->produktId ?? 0) /* bei Bearbeiten die ID mitsenden, sonst 0 */ ?>">
+            <input type="hidden" name="produkt_id" value="<?= (int) ($produkt?->produktId ?? 0) /* bei Bearbeiten die ID mitsenden, sonst 0 */ ?>">
 
             <fieldset>
                 <legend>Produktdaten</legend>
                 <label>Bezeichnung
-                    <input type="text" name="bezeichnung" value="<?= htmlspecialchars($eingabe['bezeichnung'] ?? $produkt->bezeichnung ?? '') /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
+                    <input type="text" name="bezeichnung" value="<?= htmlspecialchars($eingabe['bezeichnung'] ?? $produkt?->bezeichnung ?? '') /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
                 </label>
                 <label>Beschreibung
-                    <textarea name="beschreibung" rows="4"><?= htmlspecialchars($eingabe['beschreibung'] ?? $produkt->beschreibung ?? '') /* eingegebenen oder gespeicherten Wert vorbelegen */ ?></textarea>
+                    <textarea name="beschreibung" rows="4"><?= htmlspecialchars($eingabe['beschreibung'] ?? $produkt?->beschreibung ?? '') /* eingegebenen oder gespeicherten Wert vorbelegen */ ?></textarea>
                 </label>
                 <label>Preis (€)
-                    <input type="text" name="preis" value="<?= htmlspecialchars($eingabe['preis'] ?? (string) ($produkt->preis ?? '') ) /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
+                    <input type="text" name="preis" value="<?= htmlspecialchars($eingabe['preis'] ?? (string) ($produkt?->preis ?? '') ) /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
                 </label>
                 <label>Kategorie
                     <select name="kategorie_id"> <!-- Auswahlliste aller vorhandenen Kategorien -->
                         <?php foreach ($kategorien as $kategorie): // jede Kategorie als Option ausgeben ?>
-                            <?php $ausgewaehlt = (int) ($eingabe['kategorie_id'] ?? $produkt->kategorieId ?? 0) === $kategorie->kategorieId; // prüft, ob diese Kategorie vorausgewählt sein soll ?>
+                            <?php $ausgewaehlt = (int) ($eingabe['kategorie_id'] ?? $produkt?->kategorieId ?? 0) === $kategorie->kategorieId; // prüft, ob diese Kategorie vorausgewählt sein soll ?>
                             <option value="<?= (int) $kategorie->kategorieId /* Wert der Option */ ?>" <?= $ausgewaehlt ? 'selected' : '' /* vorausgewählte Option markieren */ ?>>
                                 <?= htmlspecialchars($kategorie->bezeichnung) /* Kategoriename sicher ausgeben */ ?>
                             </option>
@@ -44,7 +44,7 @@
                     </select>
                 </label>
                 <label>Lagerbestand
-                    <input type="text" name="lagerbestand" value="<?= htmlspecialchars($eingabe['lagerbestand'] ?? (string) ($produkt->lagerbestand ?? '0')) /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
+                    <input type="text" name="lagerbestand" value="<?= htmlspecialchars($eingabe['lagerbestand'] ?? (string) ($produkt?->lagerbestand ?? '0')) /* eingegebenen oder gespeicherten Wert vorbelegen */ ?>">
                 </label>
                 <label>
                     <input type="checkbox" name="aktiv" <?= ($produkt === null || $produkt->aktiv) ? 'checked' : '' /* bei neuem Produkt oder aktivem Produkt angehakt */ ?>>
