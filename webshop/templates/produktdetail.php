@@ -22,7 +22,7 @@
             <h1><?= htmlspecialchars($produkt->bezeichnung) /* Produktname sicher ausgeben */ ?></h1>
             <p><strong><?= number_format($produkt->preis, 2, ',', '.') /* Preis formatiert ausgeben */ ?> €</strong></p>
             <p><?= nl2br(htmlspecialchars($produkt->beschreibung ?? '')) /* Beschreibung sicher ausgeben, Zeilenumbrüche erhalten */ ?></p>
-            <p>Kategorie: <?= htmlspecialchars($kategorie->bezeichnung ?? 'unbekannt') /* Kategoriename sicher ausgeben, Fallback falls keine Kategorie gefunden wurde */ ?></p>
+            <p>Kategorie: <?= htmlspecialchars($kategorie?->bezeichnung ?? 'unbekannt') /* Kategoriename sicher ausgeben, Fallback falls keine Kategorie gefunden wurde */ ?></p>
             <p>Lagerbestand: <?= (int) $produkt->lagerbestand /* verfügbare Stückzahl als Zahl ausgeben */ ?> Stück</p>
 
             <form action="warenkorb.php" method="post"> <!-- Formular zum Hinzufügen ins Warenkorb -->

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktverwaltung — Webshop</title>
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
+    <style>
+        .verwaltung-formular { display: inline-block; margin: 0; } /* Formular nimmt nur so viel Platz wie der Button, nicht die ganze Zeile */
+        .verwaltung-formular button { width: auto; margin-top: 0; } /* Button behält seine Textbreite statt der globalen 100% */
+    </style>
 </head>
 <body>
     <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
@@ -27,7 +31,7 @@
                             <td>
                                 <a href="produkt_formular.php?id=<?= (int) $produkt->produktId /* zu bearbeitendes Produkt festlegen */ ?>">Bearbeiten</a>
                                 <?php if ($produkt->aktiv): // Löschen nur anbieten, wenn das Produkt noch aktiv ist ?>
-                                    <form action="produkt_loeschen.php" method="post" style="display:inline"> <!-- Formular zum Deaktivieren des Produkts -->
+                                    <form class="verwaltung-formular" action="produkt_loeschen.php" method="post"> <!-- Formular zum Deaktivieren des Produkts -->
                                         <input type="hidden" name="produkt_id" value="<?= (int) $produkt->produktId /* betroffenes Produkt festlegen */ ?>">
                                         <button type="submit" onclick="return confirm('Produkt wirklich löschen?')">Löschen</button> <!-- fragt vor dem Löschen nach Bestätigung -->
                                     </form>

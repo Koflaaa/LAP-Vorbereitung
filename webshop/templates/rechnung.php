@@ -65,7 +65,7 @@
                         <tbody>
                             <?php foreach ($positionen as $position): // jede Rechnungsposition ausgeben ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($position['produkt']->bezeichnung ?? 'unbekanntes Produkt') /* Produktname sicher ausgeben, Fallback falls gelöscht */ ?></td>
+                                    <td><?= htmlspecialchars($position['produkt']?->bezeichnung ?? 'unbekanntes Produkt') /* Produktname sicher ausgeben, Fallback falls gelöscht */ ?></td>
                                     <td><?= (int) $position['menge'] /* Menge ausgeben */ ?></td>
                                     <td><?= number_format($position['einzelpreis'], 2, ',', '.') /* Einzelpreis formatiert ausgeben */ ?> €</td>
                                     <td><?= number_format($position['zwischensumme'], 2, ',', '.') /* Zeilensumme formatiert ausgeben */ ?> €</td>

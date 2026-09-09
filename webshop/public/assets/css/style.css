@@ -165,6 +165,15 @@ input:focus, select:focus, textarea:focus {
     outline-offset: 1px; /* kleiner Abstand zwischen Element und Fokusrahmen */
 }
 
+/* Checkboxen und Radiobuttons sollen ihre native, kleine Form behalten statt wie Textfelder gestreckt zu werden */
+input[type="checkbox"], input[type="radio"] {
+    width: auto; /* keine volle Breite wie bei Textfeldern */
+    display: inline-block; /* neben dem zugehörigen Label-Text stehen statt eine eigene Zeile zu erzwingen */
+    padding: 0; /* kein Innenabstand wie bei Textfeldern */
+    margin: 0 0.4rem 0 0; /* kleiner Abstand zum folgenden Labeltext statt des Textfeld-Abstands */
+    border: none; /* kein zusätzlicher Rahmen um das native Kästchen */
+}
+
 button {
     margin-top: 1rem; /* Abstand zu den Eingabefeldern darüber */
     cursor: pointer; /* zeigt an, dass der Button klickbar ist */
