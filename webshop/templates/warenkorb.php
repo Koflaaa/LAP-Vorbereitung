@@ -12,8 +12,8 @@
     </style>
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="index.php">&larr; Zurück zur Produktübersicht</a></p>
         <h1>Warenkorb</h1>
 
         <?php if (empty($positionen)): // prüft, ob der Warenkorb leer ist ?>

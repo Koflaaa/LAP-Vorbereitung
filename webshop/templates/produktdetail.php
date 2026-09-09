@@ -10,9 +10,8 @@
     </style>
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="index.php">&larr; Zurück zur Produktübersicht</a> <a href="warenkorb.php">Warenkorb</a></p>
-
         <?php if (!$produkt): // prüft, ob das Produkt gefunden wurde ?>
             <p>Produkt wurde nicht gefunden.</p>
         <?php else: // wenn das Produkt vorhanden ist ?>

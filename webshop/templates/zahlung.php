@@ -11,8 +11,8 @@
     </style>
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="warenkorb.php">&larr; Zurück zum Warenkorb</a></p>
         <h1>Zahlungsart wählen</h1>
 
         <div class="tabelle-wrapper"> <!-- ermöglicht horizontales Scrollen der Tabelle auf schmalen Bildschirmen -->

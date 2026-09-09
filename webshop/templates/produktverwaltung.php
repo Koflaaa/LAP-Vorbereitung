@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="index.php">&larr; Zurück zur Produktübersicht</a></p>
         <h1>Produktverwaltung</h1>
         <p><a href="produkt_formular.php">Neues Produkt anlegen</a></p>
 

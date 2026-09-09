@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="produktverwaltung.php">&larr; Zurück zur Produktverwaltung</a></p>
         <h1><?= $produkt ? 'Produkt bearbeiten' : 'Neues Produkt anlegen' /* Überschrift je nach Modus */ ?></h1>
 
         <?php if (!empty($fehler)): // wenn Validierungsfehler vorhanden sind ?>

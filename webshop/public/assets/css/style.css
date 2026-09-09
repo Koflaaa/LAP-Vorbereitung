@@ -4,11 +4,48 @@
     box-sizing: border-box; /* Innenabstand und Rahmen werden in die angegebene Breite eingerechnet, verhindert Überlauf auf kleinen Bildschirmen */
 }
 
+:root {
+    --farbe-marke: #2f5d50; /* Haupt-Markenfarbe (Grün), einmal definiert, überall wiederverwendet */
+    --farbe-marke-dunkel: #23473d; /* dunklerer Ton für Hover-Effekte */
+    --farbe-text: #222; /* dunkelgraue statt reinschwarze Schrift, angenehmer für die Augen */
+    --farbe-rand: #ddd; /* einheitliche, helle Rahmenfarbe */
+    --farbe-hintergrund-hell: #f7f7f5; /* leicht abgesetzter Hintergrund für Kacheln */
+}
+
 body {
     font-family: sans-serif; /* gut lesbare Standardschrift auf allen Geräten */
     margin: 0; /* Standardrand des Browsers entfernen, Abstand kommt von .container */
     line-height: 1.5; /* Zeilenabstand für bessere Lesbarkeit */
-    color: #222; /* dunkelgraue statt reinschwarze Schrift, angenehmer für die Augen */
+    color: var(--farbe-text); /* einheitliche Textfarbe aus der Variable */
+}
+
+/* Hauptnavigation: volle Breite, auf jeder Seite gleich (Punkt 5: durchgängige, logische Benutzerführung) */
+.hauptnav {
+    display: flex; /* Links nebeneinander anordnen */
+    flex-wrap: wrap; /* auf schmalen Bildschirmen automatisch umbrechen statt abzuschneiden */
+    align-items: center; /* vertikal zentrieren */
+    gap: 0.35rem 1.25rem; /* Abstand zwischen den Links, auch nach dem Umbruch */
+    background: var(--farbe-marke); /* Markenfarbe als Hintergrund, hebt die Navigation vom Inhalt ab */
+    padding: 0.85rem 1.25rem; /* ausreichend große Klickfläche */
+}
+
+.hauptnav a {
+    color: #fff; /* weiße Schrift auf dunklem Hintergrund */
+    text-decoration: none; /* keine Standard-Unterstreichung */
+    font-weight: 600; /* etwas kräftiger als Fließtext, wirkt wie ein Menüpunkt */
+}
+
+.hauptnav a:hover, .hauptnav a:focus {
+    text-decoration: underline; /* sichtbares Feedback bei Hover/Tastaturfokus */
+}
+
+.hauptnav-konto {
+    margin-left: auto; /* schiebt den Konto-Bereich an den rechten Rand */
+    display: flex; /* Name und Logout-Link nebeneinander */
+    align-items: center; /* vertikal zentrieren */
+    gap: 0.75rem; /* Abstand zwischen Name und Link */
+    flex-wrap: wrap; /* bricht auf sehr schmalen Bildschirmen sauber um */
+    color: #fff; /* weiße Schrift wie der Rest der Navigation */
 }
 
 .container {
@@ -18,15 +55,22 @@ body {
 }
 
 .nav-links {
-    margin-bottom: 1rem; /* Abstand zum folgenden Inhalt */
+    margin-bottom: 1rem; /* Abstand zum folgenden Inhalt (Rück-Link innerhalb einer Unterseite, nicht die Hauptnavigation) */
 }
 
 .nav-links a {
     margin-right: 1rem; /* Abstand zwischen mehreren Links */
+    color: var(--farbe-marke); /* Links in der Markenfarbe statt Standard-Blau */
 }
 
 h1 {
     font-size: 1.5rem; /* auf kleinen Bildschirmen kompakter als der Browser-Standard */
+    color: var(--farbe-marke-dunkel); /* Überschrift in der Markenfarbe, wirkt einheitlicher */
+}
+
+h2 {
+    font-size: 1.15rem; /* Zwischenüberschriften kompakt halten (z. B. auf der Statistikseite) */
+    margin-top: 2rem; /* deutlicher Abstand zum vorherigen Abschnitt */
 }
 
 img {
@@ -42,9 +86,17 @@ img {
 }
 
 .produkt-karte {
-    border: 1px solid #ccc; /* sichtbarer Rahmen um jede Kachel */
+    border: 1px solid var(--farbe-rand); /* sichtbarer Rahmen um jede Kachel */
+    border-radius: 6px; /* leicht abgerundete Ecken, wirkt weniger technisch */
     padding: 1rem; /* Innenabstand der Kachel */
     text-align: center; /* Bild, Name und Preis mittig ausrichten */
+    background: var(--farbe-hintergrund-hell); /* leicht abgesetzt vom weißen Hintergrund */
+    transition: box-shadow 0.15s ease, transform 0.15s ease; /* sanfte Animation beim Hover */
+}
+
+.produkt-karte:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); /* leichter Schatten als Hover-Feedback */
+    transform: translateY(-2px); /* Kachel hebt sich minimal beim Überfahren */
 }
 
 .produkt-karte img {
@@ -83,8 +135,14 @@ th, td {
 
 fieldset {
     flex: 1 1 260px; /* wächst/schrumpft flexibel, bricht unter 260px in die nächste Zeile um */
-    border: 1px solid #ccc; /* sichtbarer Rahmen um jeden Formularblock */
+    border: 1px solid var(--farbe-rand); /* sichtbarer Rahmen um jeden Formularblock */
+    border-radius: 6px; /* leicht abgerundete Ecken, passend zu den Produktkacheln */
     min-width: 0; /* verhindert Überlaufen bei sehr schmalen Bildschirmen (Flexbox-Falle) */
+}
+
+legend {
+    font-weight: 600; /* hebt den Titel jedes Formularblocks hervor */
+    padding: 0 0.4rem; /* etwas Abstand zum umgebenden Rahmen */
 }
 
 label {
@@ -92,16 +150,32 @@ label {
     margin-top: 0.5rem; /* Abstand zwischen den Feldern */
 }
 
-input, button {
+input, button, select, textarea {
     width: 100%; /* Eingabefelder und Buttons füllen ihren Block, gut für Touch-Bedienung */
     padding: 0.6rem; /* ausreichend große Klickfläche auf Touchscreens */
     margin-top: 0.25rem; /* kleiner Abstand zum Label */
     font-size: 1rem; /* verhindert automatisches Hineinzoomen auf iOS bei Eingabefeldern */
+    font-family: inherit; /* Formularelemente übernehmen die Seitenschrift statt der Browser-Standardschrift */
+    border: 1px solid var(--farbe-rand); /* einheitlicher, dezenter Rahmen */
+    border-radius: 4px; /* leicht abgerundete Ecken */
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--farbe-marke); /* deutlich sichtbarer Fokusrahmen für Tastaturbedienung/Barrierefreiheit */
+    outline-offset: 1px; /* kleiner Abstand zwischen Element und Fokusrahmen */
 }
 
 button {
     margin-top: 1rem; /* Abstand zu den Eingabefeldern darüber */
     cursor: pointer; /* zeigt an, dass der Button klickbar ist */
+    background: var(--farbe-marke); /* Button in der Markenfarbe, hebt sich klar als Aktion ab */
+    color: #fff; /* weiße Schrift auf dunklem Button */
+    border: none; /* der farbige Hintergrund ersetzt den Rahmen */
+    font-weight: 600; /* wirkt wie ein klickbarer Call-to-Action */
+}
+
+button:hover {
+    background: var(--farbe-marke-dunkel); /* dunklerer Ton als Hover-Feedback */
 }
 
 .fehler {

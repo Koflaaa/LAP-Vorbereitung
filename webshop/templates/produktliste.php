@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="warenkorb.php">Warenkorb</a> <a href="statistik.php">Statistik</a> <a href="produktverwaltung.php">Produktverwaltung</a></p>
         <h1>Produktübersicht</h1>
 
         <?php if (empty($produkte)): // prüft, ob die Produktliste leer ist ?>

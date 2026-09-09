@@ -19,13 +19,23 @@ if (empty($warenkorb->getPositionen())) { // ohne Artikel im Warenkorb gibt es n
     exit; // Skript beenden
 }
 
+$kundeRepo = new KundeRepository(); // erstellt das Kunde-Repository
+$adresseRepo = new AdresseRepository(); // erstellt das Adresse-Repository
+
+$eingeloggterKunde = isset($_SESSION['kunde_id']) ? $kundeRepo->findById($_SESSION['kunde_id']) : null; // lädt den angemeldeten Kunden, falls vorhanden
+$gespeicherteRechnung = $eingeloggterKunde ? $adresseRepo->findLetzteVonKunde($eingeloggterKunde->kundeId, Adresse::TYP_RECHNUNG) : null; // zuletzt verwendete Rechnungsadresse zur Vorbefüllung
+$gespeicherteLieferung = $eingeloggterKunde ? $adresseRepo->findLetzteVonKunde($eingeloggterKunde->kundeId, Adresse::TYP_LIEFERUNG) : null; // zuletzt verwendete Lieferadresse zur Vorbefüllung
+
 $fehler = []; // Liste der Validierungsfehler
 $eingabe = $_POST; // zuletzt eingegebene Werte, damit das Formular bei Fehlern nicht leer ist
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
     $identisch = isset($_POST['lieferadresse_identisch']); // true, wenn die Checkbox angehakt wurde
 
-    $pflichtfelder = ['vorname', 'nachname', 'email', 'telefon', 'r_strasse', 'r_hausnummer', 'r_plz', 'r_ort', 'r_land']; // immer erforderliche Felder
+    $pflichtfelder = ['r_strasse', 'r_hausnummer', 'r_plz', 'r_ort', 'r_land']; // Rechnungsadresse ist immer erforderlich
+    if (!$eingeloggterKunde) { // Kontaktdaten nur bei Gastbestellung abfragen, eingeloggte Kunden haben sie schon hinterlegt
+        $pflichtfelder = array_merge(['vorname', 'nachname', 'email', 'telefon'], $pflichtfelder); // Kontaktfelder ergänzen
+    }
     if (!$identisch) { // eigene Lieferadresse nur prüfen, wenn sie nicht der Rechnungsadresse entspricht
         $pflichtfelder = array_merge($pflichtfelder, ['l_strasse', 'l_hausnummer', 'l_plz', 'l_ort', 'l_land']); // Lieferadress-Felder ergänzen
     }
@@ -36,26 +46,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
         }
     }
 
-    if (!filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL)) { // E-Mail-Format prüfen
+    if (!$eingeloggterKunde && !filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL)) { // E-Mail-Format nur bei Gastbestellung prüfen
         $fehler[] = 'Die E-Mail-Adresse ist ungültig.'; // Fehlermeldung sammeln
     }
 
     if (empty($fehler)) { // nur speichern, wenn keine Fehler aufgetreten sind
-        $kundeRepo = new KundeRepository(); // erstellt das Kunde-Repository
-        $adresseRepo = new AdresseRepository(); // erstellt das Adresse-Repository
-
-        $kunde = new Kunde( // neues Kunde-Objekt aus den Formulardaten aufbauen
-            kundeId: null, // noch nicht gespeichert
-            vorname: trim($_POST['vorname']), // Vorname übernehmen
-            nachname: trim($_POST['nachname']), // Nachname übernehmen
-            email: trim($_POST['email']), // E-Mail übernehmen
-            telefon: trim($_POST['telefon']) // Telefonnummer übernehmen
-        );
-        $kundeId = $kundeRepo->erstellen($kunde); // Kunden in der DB anlegen, ID zurückbekommen
+        if ($eingeloggterKunde) { // bereits angemeldeter Kunde
+            $kundeId = $eingeloggterKunde->kundeId; // vorhandenen Kunden weiterverwenden, keinen neuen anlegen
+        } else { // Gastbestellung
+            $kunde = new Kunde( // neues Kunde-Objekt aus den Formulardaten aufbauen
+                kundeId: null, // noch nicht gespeichert
+                vorname: trim($_POST['vorname']), // Vorname übernehmen
+                nachname: trim($_POST['nachname']), // Nachname übernehmen
+                email: trim($_POST['email']), // E-Mail übernehmen
+                telefon: trim($_POST['telefon']) // Telefonnummer übernehmen
+            );
+            $kundeId = $kundeRepo->erstellen($kunde); // Kunden in der DB anlegen, ID zurückbekommen
+        }
 
         $rechnungsadresse = new Adresse( // Rechnungsadresse aus den Formulardaten aufbauen
             adresseId: null, // noch nicht gespeichert
-            kundeId: $kundeId, // gehört zum neu angelegten Kunden
+            kundeId: $kundeId, // gehört zum Kunden dieser Bestellung
             typ: Adresse::TYP_RECHNUNG, // Typ "rechnung"
             strasse: trim($_POST['r_strasse']), // Straße übernehmen
             hausnummer: trim($_POST['r_hausnummer']), // Hausnummer übernehmen
@@ -71,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
 
         $lieferadresse = new Adresse( // Lieferadresse aus den ermittelten Werten aufbauen
             adresseId: null, // noch nicht gespeichert
-            kundeId: $kundeId, // gehört zum neu angelegten Kunden
+            kundeId: $kundeId, // gehört zum Kunden dieser Bestellung
             typ: Adresse::TYP_LIEFERUNG, // Typ "lieferung"
             strasse: trim($lieferdaten['r_strasse']), // Straße übernehmen
             hausnummer: trim($lieferdaten['r_hausnummer']), // Hausnummer übernehmen
@@ -81,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
         );
         $lieferadresseId = $adresseRepo->erstellen($lieferadresse); // Lieferadresse in der DB anlegen
 
-        $_SESSION['kasse'] = [ // Ergebnis für den nächsten Schritt (Zahlungsart, Schritt 3c) in der Session merken
-            'kunde_id' => $kundeId, // angelegter Kunde
+        $_SESSION['kasse'] = [ // Ergebnis für den nächsten Schritt (Zahlungsart) in der Session merken
+            'kunde_id' => $kundeId, // verwendeter Kunde
             'rechnungsadresse_id' => $rechnungsadresseId, // angelegte Rechnungsadresse
             'lieferadresse_id' => $lieferadresseId, // angelegte Lieferadresse
         ];
@@ -92,4 +103,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // das Formular wurde abgeschickt
     }
 }
 
-require __DIR__ . '/../templates/kasse.php'; // bindet die Ansicht ein und stellt ihr $fehler, $eingabe und $gespeichert zur Verfügung
+require __DIR__ . '/../templates/kasse.php'; // bindet die Ansicht ein und stellt ihr $fehler, $eingabe, $eingeloggterKunde und die gespeicherten Adressen zur Verfügung

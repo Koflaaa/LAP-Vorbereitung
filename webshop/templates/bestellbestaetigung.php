@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
         <?php if (!$bestellung): // prüft, ob die Bestellung gefunden wurde ?>
             <p>Bestellung wurde nicht gefunden.</p>
@@ -33,9 +34,8 @@
             </div>
 
             <p><strong>Gesamtsumme: <?= number_format($bestellung->gesamtbetrag, 2, ',', '.') /* Gesamtsumme formatiert ausgeben */ ?> €</strong></p>
+            <p><a href="rechnung.php?id=<?= (int) $bestellung->bestellungId /* verlinkt die zugehörige Rechnung */ ?>">Rechnung ansehen</a></p>
         <?php endif; ?>
-
-        <p class="nav-links"><a href="index.php">Zurück zur Produktübersicht</a></p>
     </div>
 </body>
 </html>

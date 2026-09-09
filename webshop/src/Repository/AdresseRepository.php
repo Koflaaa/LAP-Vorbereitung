@@ -30,6 +30,29 @@ class AdresseRepository // kapselt den Datenbankzugriff auf die Tabelle "adresse
         return (int) $db->lastInsertId(); // liefert die vom DBMS vergebene neue ID
     }
 
+    public function findById(int $adresseId): ?Adresse // liefert eine einzelne Adresse anhand ihrer ID (z. B. für die Rechnung)
+    {
+        $db = Database::getConnection(); // holt die gemeinsame Datenbankverbindung
+        $stmt = $db->prepare('SELECT * FROM adresse WHERE adresse_id = :id'); // bereitet die Abfrage vor
+        $stmt->execute(['id' => $adresseId]); // führt die Abfrage mit der übergebenen ID aus
+        $zeile = $stmt->fetch(); // holt die eine Ergebniszeile (oder false, wenn keine gefunden wurde)
+
+        if (!$zeile) { // wenn keine Adresse gefunden wurde
+            return null; // null zurückgeben
+        }
+
+        return new Adresse( // Ergebniszeile in ein Adresse-Objekt umwandeln
+            adresseId: (int) $zeile['adresse_id'], // ID aus der DB in ein int umwandeln
+            kundeId: (int) $zeile['kunde_id'], // Kunde-ID umwandeln
+            typ: $zeile['typ'], // Typ unverändert übernehmen
+            strasse: $zeile['strasse'], // Straße unverändert übernehmen
+            hausnummer: $zeile['hausnummer'], // Hausnummer unverändert übernehmen
+            plz: $zeile['plz'], // Postleitzahl unverändert übernehmen
+            ort: $zeile['ort'], // Ort unverändert übernehmen
+            land: $zeile['land'] // Land unverändert übernehmen
+        );
+    }
+
     public function findLetzteVonKunde(int $kundeId, string $typ): ?Adresse // liefert die zuletzt gespeicherte Adresse eines Kunden für Vorbefüllung
     {
         $db = Database::getConnection(); // holt die gemeinsame Datenbankverbindung

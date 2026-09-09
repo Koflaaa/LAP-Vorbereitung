@@ -7,9 +7,13 @@
     <link rel="stylesheet" href="assets/css/style.css"> <!-- gemeinsames, responsives Stylesheet einbinden -->
 </head>
 <body>
+    <?php require __DIR__ . '/partials/nav.php'; // bindet die gemeinsame Navigation mit Login-Status ein ?>
     <div class="container"> <!-- begrenzt die Inhaltsbreite und sorgt für Randabstand auf allen Bildschirmgrößen -->
-        <p class="nav-links"><a href="warenkorb.php">&larr; Zurück zum Warenkorb</a></p>
         <h1>Kasse — Kundendaten</h1>
+
+        <?php if ($eingeloggterKunde): // Kontaktdaten schon bekannt, nur kurz begrüßen ?>
+            <p>Angemeldet als <?= htmlspecialchars($eingeloggterKunde->vorname . ' ' . $eingeloggterKunde->nachname) /* Vor- und Nachname des angemeldeten Kunden ausgeben */ ?> (<?= htmlspecialchars($eingeloggterKunde->email) /* E-Mail ausgeben */ ?>)</p>
+        <?php endif; ?>
 
         <?php if (!empty($fehler)): // wenn Validierungsfehler vorhanden sind ?>
             <ul class="fehler">
@@ -21,42 +25,44 @@
 
         <form action="kasse.php" method="post"> <!-- Formular für Kundendaten und Adressen -->
             <div class="formular-spalten"> <!-- ordnet die Blöcke auf breiten Bildschirmen nebeneinander, auf schmalen untereinander an -->
-                <fieldset>
-                    <legend>Kontaktdaten</legend>
-                    <label>Vorname
-                        <input type="text" name="vorname" value="<?= htmlspecialchars($eingabe['vorname'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
-                    </label>
-                    <label>Nachname
-                        <input type="text" name="nachname" value="<?= htmlspecialchars($eingabe['nachname'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
-                    </label>
-                    <label>E-Mail-Adresse
-                        <input type="email" name="email" value="<?= htmlspecialchars($eingabe['email'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
-                    </label>
-                    <label>Telefonnummer
-                        <input type="text" name="telefon" value="<?= htmlspecialchars($eingabe['telefon'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
-                    </label>
-                </fieldset>
+                <?php if (!$eingeloggterKunde): // Kontaktdaten nur bei Gastbestellung abfragen ?>
+                    <fieldset>
+                        <legend>Kontaktdaten</legend>
+                        <label>Vorname
+                            <input type="text" name="vorname" value="<?= htmlspecialchars($eingabe['vorname'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        </label>
+                        <label>Nachname
+                            <input type="text" name="nachname" value="<?= htmlspecialchars($eingabe['nachname'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        </label>
+                        <label>E-Mail-Adresse
+                            <input type="email" name="email" value="<?= htmlspecialchars($eingabe['email'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        </label>
+                        <label>Telefonnummer
+                            <input type="text" name="telefon" value="<?= htmlspecialchars($eingabe['telefon'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        </label>
+                    </fieldset>
+                <?php endif; ?>
 
                 <fieldset>
                     <legend>Rechnungsadresse</legend>
                     <label>Straße
-                        <input type="text" name="r_strasse" value="<?= htmlspecialchars($eingabe['r_strasse'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        <input type="text" name="r_strasse" value="<?= htmlspecialchars($eingabe['r_strasse'] ?? $gespeicherteRechnung->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Hausnummer
-                        <input type="text" name="r_hausnummer" value="<?= htmlspecialchars($eingabe['r_hausnummer'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        <input type="text" name="r_hausnummer" value="<?= htmlspecialchars($eingabe['r_hausnummer'] ?? $gespeicherteRechnung->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>PLZ
-                        <input type="text" name="r_plz" value="<?= htmlspecialchars($eingabe['r_plz'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        <input type="text" name="r_plz" value="<?= htmlspecialchars($eingabe['r_plz'] ?? $gespeicherteRechnung->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Ort
-                        <input type="text" name="r_ort" value="<?= htmlspecialchars($eingabe['r_ort'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                        <input type="text" name="r_ort" value="<?= htmlspecialchars($eingabe['r_ort'] ?? $gespeicherteRechnung->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                     </label>
                     <label>Land
-                        <input type="text" name="r_land" value="<?= htmlspecialchars($eingabe['r_land'] ?? 'Österreich') /* zuletzt eingegebenen Wert vorbelegen, sonst Standardwert */ ?>">
+                        <input type="text" name="r_land" value="<?= htmlspecialchars($eingabe['r_land'] ?? $gespeicherteRechnung->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
                     </label>
                 </fieldset>
 
-                <fieldset id="lieferadresse-block"> <!-- wird per JavaScript ein-/ausgeblendet -->
+                <fieldset id="lieferadresse-block">
                     <legend>Lieferadresse</legend>
                     <label>
                         <input type="checkbox" id="identisch" name="lieferadresse_identisch" <?= isset($eingabe['lieferadresse_identisch']) || $eingabe === [] ? 'checked' : '' /* beim ersten Aufruf oder wenn zuvor angehakt vorbelegen */ ?>>
@@ -64,19 +70,19 @@
                     </label>
                     <div id="lieferadresse-felder"> <!-- die eigentlichen Felder, werden bei "identisch" ausgeblendet -->
                         <label>Straße
-                            <input type="text" name="l_strasse" value="<?= htmlspecialchars($eingabe['l_strasse'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                            <input type="text" name="l_strasse" value="<?= htmlspecialchars($eingabe['l_strasse'] ?? $gespeicherteLieferung->strasse ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Hausnummer
-                            <input type="text" name="l_hausnummer" value="<?= htmlspecialchars($eingabe['l_hausnummer'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                            <input type="text" name="l_hausnummer" value="<?= htmlspecialchars($eingabe['l_hausnummer'] ?? $gespeicherteLieferung->hausnummer ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>PLZ
-                            <input type="text" name="l_plz" value="<?= htmlspecialchars($eingabe['l_plz'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                            <input type="text" name="l_plz" value="<?= htmlspecialchars($eingabe['l_plz'] ?? $gespeicherteLieferung->plz ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Ort
-                            <input type="text" name="l_ort" value="<?= htmlspecialchars($eingabe['l_ort'] ?? '') /* zuletzt eingegebenen Wert vorbelegen */ ?>">
+                            <input type="text" name="l_ort" value="<?= htmlspecialchars($eingabe['l_ort'] ?? $gespeicherteLieferung->ort ?? '') /* Eingabe, sonst gespeicherte Adresse, sonst leer */ ?>">
                         </label>
                         <label>Land
-                            <input type="text" name="l_land" value="<?= htmlspecialchars($eingabe['l_land'] ?? 'Österreich') /* zuletzt eingegebenen Wert vorbelegen, sonst Standardwert */ ?>">
+                            <input type="text" name="l_land" value="<?= htmlspecialchars($eingabe['l_land'] ?? $gespeicherteLieferung->land ?? 'Österreich') /* Eingabe, sonst gespeicherte Adresse, sonst Standardwert */ ?>">
                         </label>
                     </div>
                 </fieldset>
