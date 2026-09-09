@@ -45,9 +45,4 @@ class Warenkorb // verwaltet den Warenkorb in der PHP-Session (produkt_id => men
     {
         return $_SESSION['warenkorb']; // aktuellen Inhalt der Session zurückgeben
     }
-
-    public function anzahlArtikel(): int // liefert die Gesamtzahl aller Artikel (für die Anzeige, z. B. "3 Artikel")
-    {
-        return array_sum($_SESSION['warenkorb']); // summiert alle Mengen im Warenkorb
-    }
 }
