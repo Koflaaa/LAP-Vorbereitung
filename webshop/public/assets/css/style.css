@@ -1,0 +1,117 @@
+/* gemeinsames Stylesheet für alle Seiten des Webshops (responsiv: Handy, Tablet, Desktop) */
+
+* {
+    box-sizing: border-box; /* Innenabstand und Rahmen werden in die angegebene Breite eingerechnet, verhindert Überlauf auf kleinen Bildschirmen */
+}
+
+body {
+    font-family: sans-serif; /* gut lesbare Standardschrift auf allen Geräten */
+    margin: 0; /* Standardrand des Browsers entfernen, Abstand kommt von .container */
+    line-height: 1.5; /* Zeilenabstand für bessere Lesbarkeit */
+    color: #222; /* dunkelgraue statt reinschwarze Schrift, angenehmer für die Augen */
+}
+
+.container {
+    max-width: 900px; /* verhindert überlange Zeilen auf breiten Desktop-Bildschirmen */
+    margin: 0 auto; /* zentriert den Inhalt horizontal */
+    padding: 1rem; /* Abstand zum Bildschirmrand, wichtig auf Handys */
+}
+
+.nav-links {
+    margin-bottom: 1rem; /* Abstand zum folgenden Inhalt */
+}
+
+.nav-links a {
+    margin-right: 1rem; /* Abstand zwischen mehreren Links */
+}
+
+h1 {
+    font-size: 1.5rem; /* auf kleinen Bildschirmen kompakter als der Browser-Standard */
+}
+
+img {
+    max-width: 100%; /* Bilder werden nie breiter als ihr Container, kein horizontales Überlaufen */
+    height: auto; /* Seitenverhältnis beim Verkleinern beibehalten */
+}
+
+/* Produktliste: passt die Spaltenzahl automatisch an die verfügbare Breite an */
+.produkt-grid {
+    display: grid; /* Kachel-Layout */
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* so viele Spalten wie Platz vorhanden ist, mindestens 160px breit */
+    gap: 1rem; /* Abstand zwischen den Kacheln */
+}
+
+.produkt-karte {
+    border: 1px solid #ccc; /* sichtbarer Rahmen um jede Kachel */
+    padding: 1rem; /* Innenabstand der Kachel */
+    text-align: center; /* Bild, Name und Preis mittig ausrichten */
+}
+
+.produkt-karte img {
+    height: 150px; /* einheitliche Bildhöhe in der Liste */
+    object-fit: cover; /* Bild ohne Verzerrung auf die feste Höhe zuschneiden */
+}
+
+.produkt-karte a {
+    text-decoration: none; /* Link nicht unterstrichen anzeigen */
+    color: inherit; /* Linkfarbe von der Umgebung übernehmen statt Standard-Blau */
+}
+
+/* Tabellen (Warenkorb, Zahlungsübersicht, Bestellbestätigung): auf schmalen Bildschirmen seitlich scrollbar statt gequetscht */
+.tabelle-wrapper {
+    overflow-x: auto; /* horizontales Scrollen erlauben, wenn die Tabelle zu breit für den Bildschirm ist */
+}
+
+table {
+    border-collapse: collapse; /* keine doppelten Rahmenlinien zwischen Zellen */
+    width: 100%; /* Tabelle füllt ihren Wrapper */
+    min-width: 420px; /* Mindestbreite, damit Spalten auch bei wenig Inhalt lesbar bleiben */
+}
+
+th, td {
+    border: 1px solid #ccc; /* einheitliche Zellenränder */
+    padding: 0.5rem; /* Innenabstand der Zellen */
+    text-align: left; /* Text linksbündig, besser lesbar als zentriert */
+}
+
+/* Formulare (Kasse, Zahlungsart): Felder untereinander auf dem Handy, nebeneinander auf breiten Bildschirmen */
+.formular-spalten {
+    display: flex; /* Fieldsets nebeneinander anordnen, wenn Platz ist */
+    flex-wrap: wrap; /* auf schmalen Bildschirmen automatisch untereinander umbrechen */
+    gap: 1rem; /* Abstand zwischen den Spalten */
+}
+
+fieldset {
+    flex: 1 1 260px; /* wächst/schrumpft flexibel, bricht unter 260px in die nächste Zeile um */
+    border: 1px solid #ccc; /* sichtbarer Rahmen um jeden Formularblock */
+    min-width: 0; /* verhindert Überlaufen bei sehr schmalen Bildschirmen (Flexbox-Falle) */
+}
+
+label {
+    display: block; /* jedes Feld in eigener Zeile */
+    margin-top: 0.5rem; /* Abstand zwischen den Feldern */
+}
+
+input, button {
+    width: 100%; /* Eingabefelder und Buttons füllen ihren Block, gut für Touch-Bedienung */
+    padding: 0.6rem; /* ausreichend große Klickfläche auf Touchscreens */
+    margin-top: 0.25rem; /* kleiner Abstand zum Label */
+    font-size: 1rem; /* verhindert automatisches Hineinzoomen auf iOS bei Eingabefeldern */
+}
+
+button {
+    margin-top: 1rem; /* Abstand zu den Eingabefeldern darüber */
+    cursor: pointer; /* zeigt an, dass der Button klickbar ist */
+}
+
+.fehler {
+    color: #b00020; /* Fehlermeldungen rot hervorheben */
+}
+
+/* ab hier größere Bildschirme: Buttons und Aktionsfelder müssen nicht mehr die volle Breite einnehmen */
+@media (min-width: 600px) {
+    button {
+        width: auto; /* Button schrumpft auf seine Textbreite statt volle Breite */
+        min-width: 160px; /* bleibt trotzdem gut klickbar */
+    }
+}
