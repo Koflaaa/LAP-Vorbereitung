@@ -1,5 +1,9 @@
 <?php
 
+if (session_status() !== PHP_SESSION_ACTIVE) { // nur starten, wenn noch keine Session läuft
+    session_start(); // muss vor jeder Ausgabe passieren, damit die Navigation den Login-Status per Cookie erkennen kann
+}
+
 require_once __DIR__ . '/../src/Repository/StatistikRepository.php'; // bindet das Statistik-Repository ein
 
 use Webshop\Repository\StatistikRepository; // Klasse für die statistischen Auswertungen
